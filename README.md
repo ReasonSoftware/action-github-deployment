@@ -66,6 +66,12 @@ Just to add an action to your CD flow
 - `STATUS` - status of a deployment, must be one of the following: `[ error, failure, inactive, in_progress, queued, pending, success ]`
 - `ENVIRONMENT` - GitHub Environment, default `production`
 
+## Notes
+
+- This action is automatically built at [**Docker Hub**](https://hub.docker.com/r/reasonsoftware/action-github-deployment), and tagged with `latest / v1 / v1.2 / v1.2.3` allowing to lock against a certain version
+*It's recommended to lock against a major version, for example* `v1`
+- Docker image is published both to [**Docker Hub**](https://hub.docker.com/r/reasonsoftware/action-github-deployment) and [**GitHub Packages**](https://github.com/ReasonSoftware/action-github-deployment/packages). If you don't want to rely on **Docker Hub** but still want to use the dockerized action, you may switch from `uses: docker://reasonsoftware/action-github-deployment:v1` to `uses: docker://docker.pkg.github.com/reasonsoftware/action-github-deployment/action-github-deployment:v1`
+
 ## License
 
 [Apache-2.0](LICENSE.md) © 2021 [Reason Cybersecurity Ltd.](https://www.reasonsecurity.com/)
