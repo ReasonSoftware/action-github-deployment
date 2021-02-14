@@ -1,0 +1,15 @@
+# OS
+**/.DS_Store
+
+# IDE
+.vscode/
+**/__debug_bin
+.idea/
+
+# project
+coverage.txt
+/vendor/
+/dist/
+
+cli.json
+cli.sh

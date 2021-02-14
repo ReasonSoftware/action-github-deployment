@@ -1,0 +1,84 @@
+name: release
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: action-github-deployment
+    steps:
+      - name: Init
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+        id: go
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: |
+          go get -v -t -d ./...
+
+      - name: Lint
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          curl -s https://api.github.com/repos/golangci/golangci-lint/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d : -f 2,3 | tr -d \" | wget -i -
+          tar -xvf golangci-lint-*-linux-amd64.tar.gz --strip=1 --no-anchored golangci-lint
+          ./golangci-lint run ./...
+
+      - name: Test
+        run: go test -v $(go list ./... | grep -v vendor | grep -v mocks) -race -coverprofile=coverage.txt -covermode=atomic
+
+      - name: Build Application
+        run: |
+          GOOS=windows GOARCH=amd64 go build -o ${{ env.APP_NAME }}-windows-amd64.exe
+          GOOS=linux GOARCH=amd64 go build -o ${{ env.APP_NAME }}-linux-amd64.exe
+
+      - name: Prepare Version Tags
+        run: |
+          echo "MAJOR=$(echo ${GITHUB_REF/refs\/tags\//} | awk -F'.' '{print $1}')" >> $GITHUB_ENV
+          echo "MINOR=$(echo ${GITHUB_REF/refs\/tags\//} | awk -F'.' '{print $1"."$2}')" >> $GITHUB_ENV
+          echo "PATCH=$(echo ${GITHUB_REF/refs\/tags\//} | awk -F'.' '{print $1"."$2"."$3}')" >> $GITHUB_ENV
+
+      - name: Build Docker Image
+        run: |
+          docker build -t build .
+          docker tag build docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:${{ env.PATCH}}
+          docker tag build docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:${{ env.MINOR}}
+          docker tag build docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:${{ env.MAJOR}}
+          docker tag build docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:latest
+          docker tag build reasonsoftware/${{ env.APP_NAME }}:${{ env.PATCH}}
+          docker tag build reasonsoftware/${{ env.APP_NAME }}:${{ env.MINOR}}
+          docker tag build reasonsoftware/${{ env.APP_NAME }}:${{ env.MAJOR}}
+          docker tag build reasonsoftware/${{ env.APP_NAME }}:latest
+
+      - name: Publish to GitHub
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u reasonsoftware --password-stdin
+          docker push docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:${{ env.PATCH}}
+          docker push docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:${{ env.MINOR}}
+          docker push docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:${{ env.MAJOR}}
+          docker push docker.pkg.github.com/reasonsoftware/${{ env.APP_NAME }}/${{ env.APP_NAME }}:latest
+
+      - name: Publish to Docker
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login --username ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+          docker push reasonsoftware/${{ env.APP_NAME }}:${{ env.PATCH}}
+          docker push reasonsoftware/${{ env.APP_NAME }}:${{ env.MINOR}}
+          docker push reasonsoftware/${{ env.APP_NAME }}:${{ env.MAJOR}}
+          docker push reasonsoftware/${{ env.APP_NAME }}:latest
+
+      - name: Release
+        uses: docker://antonyurchenko/git-release:latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ALLOW_TAG_PREFIX: "true"
+        with:
+          args: |
+            ${{ env.APP_NAME }}-windows-amd64.exe
+            ${{ env.APP_NAME }}-linux-amd64.exe

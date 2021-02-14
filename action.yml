@@ -1,0 +1,8 @@
+name: "Action GitHub Deployment"
+description: ":octocat: Reflect CD as GitHub Deployment"
+branding:
+  icon: check-circle
+  color: green
+runs:
+  using: docker
+  image: Dockerfile
