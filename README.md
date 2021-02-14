@@ -46,6 +46,20 @@ Just to add an action to your CD flow
         STATUS: success
 ```
 
+You may also update the deployment to either `success` or `failure` in one step by providing an overall status as `FAIL` environmental variable:
+
+```yaml
+    [...]
+
+    - name: Update Status
+      uses: docker://reasonsoftware/action-github-deployment:v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEPLOYMENT: ${{steps.deployment.outputs.id}}
+        STATUS: success
+        FAIL: "${{ failure() }}"
+```
+
 </details>
 
 <details><summary>:information_source: Create a deployment with non-default status</summary>
@@ -65,6 +79,7 @@ Just to add an action to your CD flow
 - `DEPLOYMENT` - existing deployment ID, required when updating status
 - `STATUS` - status of a deployment, must be one of the following: `[ error, failure, inactive, in_progress, queued, pending, success ]`
 - `ENVIRONMENT` - GitHub Environment, default `production`
+- `FAIL`: failure trap which will tweak the status to be **failure** on value `"true"`. Used to reduce overal workflow code by configuring one action for both successful or failed deployments with `FAIL: "${{ failure() }}"`
 
 ## Notes
 

@@ -15,7 +15,7 @@ import (
 )
 
 // Version of an application
-const Version string = "1.0.0"
+const Version string = "1.1.0"
 
 func init() {
 	log.SetReportCaller(false)
@@ -88,8 +88,25 @@ func main() {
 	if os.Getenv("STATUS") != "" {
 		log.Infof("updating status of a deployment %v in %v environment", id, env)
 
-		if err := app.UpdateStatus(cli.Repositories, id, os.Getenv("STATUS")); err != nil {
-			log.Fatal(errors.Wrap(err, "error updating deployment status"))
+		failed := false
+		if os.Getenv("FAIL") != "" {
+			var err error
+			failed, err = strconv.ParseBool(os.Getenv("FAIL"))
+			if err != nil {
+				log.Fatal(errors.Wrap(err, "error parsing env.var 'FAIL'"))
+			}
+		}
+
+		if failed {
+			log.Warnf("FAIL=%v, updating deployment status to 'failure'", failed)
+
+			if err := app.UpdateStatus(cli.Repositories, id, "failure"); err != nil {
+				log.Fatal(errors.Wrap(err, "error updating deployment status"))
+			}
+		} else {
+			if err := app.UpdateStatus(cli.Repositories, id, os.Getenv("STATUS")); err != nil {
+				log.Fatal(errors.Wrap(err, "error updating deployment status"))
+			}
 		}
 
 		log.Info("deployment status set to ", os.Getenv("STATUS"))
