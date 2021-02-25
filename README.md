@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/ReasonSoftware/action-github-deployment)](https://github.com/ReasonSoftware/action-github-deployment/releases/latest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ReasonSoftware/action-github-deployment)](https://goreportcard.com/report/github.com/ReasonSoftware/action-github-deployment)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ReasonSoftware/action-github-deployment)](https://hub.docker.com/r/reasonsoftware/action-github-deployment)
+[![Docker Pulls](https://img.shields.io/docker/pulls/reasonsoftware/action-github-deployment)](https://hub.docker.com/r/reasonsoftware/action-github-deployment)
 [![License](https://img.shields.io/github/license/ReasonSoftware/action-github-deployment)](LICENSE.md)
 
 A **GitHub Action** for a creation and status update of a **GitHub Deployment** during CD flow
