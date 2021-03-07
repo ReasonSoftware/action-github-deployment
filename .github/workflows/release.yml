@@ -37,7 +37,7 @@ jobs:
       - name: Build Application
         run: |
           GOOS=windows GOARCH=amd64 go build -o ${{ env.APP_NAME }}-windows-amd64.exe
-          GOOS=linux GOARCH=amd64 go build -o ${{ env.APP_NAME }}-linux-amd64.exe
+          GOOS=linux GOARCH=amd64 go build -o ${{ env.APP_NAME }}-linux-amd64
 
       - name: Prepare Version Tags
         run: |
@@ -81,4 +81,4 @@ jobs:
         with:
           args: |
             ${{ env.APP_NAME }}-windows-amd64.exe
-            ${{ env.APP_NAME }}-linux-amd64.exe
+            ${{ env.APP_NAME }}-linux-amd64
