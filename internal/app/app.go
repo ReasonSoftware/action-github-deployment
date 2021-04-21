@@ -23,6 +23,7 @@ var DeploymentStates []string = []string{
 
 // CreateDeployment creates new deployment in a provided environment.
 func CreateDeployment(cli Client, env, ref string) (int64, error) {
+	reqContexts := make([]string, 0)
 	var prod bool
 	if env == "production" {
 		prod = true
@@ -46,6 +47,7 @@ func CreateDeployment(cli Client, env, ref string) (int64, error) {
 			Environment:           &env,
 			ProductionEnvironment: &prod,
 			Ref:                   &r,
+			RequiredContexts:      &reqContexts,
 		})
 	if err != nil {
 		return 0, err

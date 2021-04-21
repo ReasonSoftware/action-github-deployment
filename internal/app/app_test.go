@@ -18,6 +18,8 @@ import (
 func TestCreateDeployment(t *testing.T) {
 	assert := assert.New(t)
 
+	reqContexts := make([]string, 0)
+
 	type test struct {
 		GitHubRepository string
 		Environment      string
@@ -38,6 +40,7 @@ func TestCreateDeployment(t *testing.T) {
 				Environment:           github.String(""),
 				ProductionEnvironment: github.Bool(false),
 				Ref:                   github.String("master"),
+				RequiredContexts:      &reqContexts,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -54,6 +57,7 @@ func TestCreateDeployment(t *testing.T) {
 				Environment:           github.String("production"),
 				ProductionEnvironment: github.Bool(true),
 				Ref:                   github.String("master"),
+				RequiredContexts:      &reqContexts,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -70,6 +74,7 @@ func TestCreateDeployment(t *testing.T) {
 				Environment:           github.String("production"),
 				ProductionEnvironment: github.Bool(true),
 				Ref:                   github.String("v1.0.0"),
+				RequiredContexts:      &reqContexts,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -86,6 +91,7 @@ func TestCreateDeployment(t *testing.T) {
 				Environment:           github.String("staging"),
 				ProductionEnvironment: github.Bool(false),
 				Ref:                   github.String("dev"),
+				RequiredContexts:      &reqContexts,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -122,6 +128,7 @@ func TestCreateDeployment(t *testing.T) {
 				Environment:           github.String("production"),
 				ProductionEnvironment: github.Bool(true),
 				Ref:                   github.String("master"),
+				RequiredContexts:      &reqContexts,
 			},
 			MockOut:     nil,
 			MockErr:     errors.New("reason"),
