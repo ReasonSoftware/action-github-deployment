@@ -19,6 +19,7 @@ func TestCreateDeployment(t *testing.T) {
 	assert := assert.New(t)
 
 	reqContexts := make([]string, 0)
+	autoMerge := false
 
 	type test struct {
 		GitHubRepository string
@@ -41,6 +42,7 @@ func TestCreateDeployment(t *testing.T) {
 				ProductionEnvironment: github.Bool(false),
 				Ref:                   github.String("master"),
 				RequiredContexts:      &reqContexts,
+				AutoMerge:             &autoMerge,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -58,6 +60,7 @@ func TestCreateDeployment(t *testing.T) {
 				ProductionEnvironment: github.Bool(true),
 				Ref:                   github.String("master"),
 				RequiredContexts:      &reqContexts,
+				AutoMerge:             &autoMerge,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -75,6 +78,7 @@ func TestCreateDeployment(t *testing.T) {
 				ProductionEnvironment: github.Bool(true),
 				Ref:                   github.String("v1.0.0"),
 				RequiredContexts:      &reqContexts,
+				AutoMerge:             &autoMerge,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -92,6 +96,7 @@ func TestCreateDeployment(t *testing.T) {
 				ProductionEnvironment: github.Bool(false),
 				Ref:                   github.String("dev"),
 				RequiredContexts:      &reqContexts,
+				AutoMerge:             &autoMerge,
 			},
 			MockOut: &github.Deployment{
 				ID: github.Int64(123456789),
@@ -129,6 +134,7 @@ func TestCreateDeployment(t *testing.T) {
 				ProductionEnvironment: github.Bool(true),
 				Ref:                   github.String("master"),
 				RequiredContexts:      &reqContexts,
+				AutoMerge:             &autoMerge,
 			},
 			MockOut:     nil,
 			MockErr:     errors.New("reason"),
