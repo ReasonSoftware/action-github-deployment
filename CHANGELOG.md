@@ -1,3 +1,7 @@
+## [2.0.0](https://github.com/ReasonSoftware/action-github-deployment/releases/tag/v2.0.0) - 2021-04-25
+### Changed
+- Disable auto-merge - allow the requested ref to be behind the repository's default branch
+
 ## [1.1.1](https://github.com/ReasonSoftware/action-github-deployment/releases/tag/v1.1.0) - 2021-04-21
 ### Fixed
 - Remove required by default commit status checks
