@@ -14,9 +14,6 @@ import (
 	"github.com/ReasonSoftware/action-github-deployment/internal/app"
 )
 
-// Version of an application
-const Version string = "2.0.0"
-
 func init() {
 	log.SetReportCaller(false)
 	log.SetFormatter(&log.TextFormatter{
@@ -27,7 +24,7 @@ func init() {
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.InfoLevel)
 
-	log.Info("action version ", Version)
+	log.Info("action version ", app.Version)
 
 	vars := []string{
 		"GITHUB_TOKEN",
