@@ -74,10 +74,9 @@ jobs:
           docker push reasonsoftware/${{ env.APP_NAME }}:latest
 
       - name: Release
-        uses: docker://antonyurchenko/git-release:latest
+        uses: docker://antonyurchenko/git-release:v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ALLOW_TAG_PREFIX: "true"
         with:
           args: |
             ${{ env.APP_NAME }}-windows-amd64.exe
