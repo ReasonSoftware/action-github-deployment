@@ -34,6 +34,14 @@ jobs:
       - name: Test
         run: go test -v $(go list ./... | grep -v vendor | grep -v mocks) -race -coverprofile=coverage.txt -covermode=atomic
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: go
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
       - name: Build Application
         run: |
           GOOS=windows GOARCH=amd64 go build -o ${{ env.APP_NAME }}-windows-amd64.exe
