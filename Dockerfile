@@ -1,4 +1,4 @@
-FROM golang:1.15 as build
+FROM golang:1.19 as build
 WORKDIR /opt/src
 COPY . .
 RUN groupadd -g 1000 appuser &&\

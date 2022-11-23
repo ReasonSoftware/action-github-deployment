@@ -14,7 +14,7 @@ jobs:
       - name: Init
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: 1.19
         id: go
 
       - name: Checkout
