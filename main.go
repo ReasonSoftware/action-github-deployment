@@ -78,7 +78,7 @@ func main() {
         if err := cmd.Run(); err != nil {
            fmt.Printf("error executing shell command: %v", err.Error())
            os.Exit(1)
-           }
+        }
 	} else {
 		n, err := strconv.Atoi(os.Getenv("DEPLOYMENT"))
 		if err != nil {
