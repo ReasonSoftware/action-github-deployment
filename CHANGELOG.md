@@ -1,6 +1,6 @@
 ## [2.0.2](https://github.com/ReasonSoftware/action-github-deployment/releases/tag/v2.0.2) - 2022-11-23
 ### Changed
-- Upgrade go version and dependencies
+- Remove deprecated set-output command, updated go version and dependencies
 
 ## [2.0.1](https://github.com/ReasonSoftware/action-github-deployment/releases/tag/v2.0.1) - 2021-05-01
 ### Changed
