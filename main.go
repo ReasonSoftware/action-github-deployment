@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"os/exec"
 
 	"github.com/google/go-github/v33/github"
 	"github.com/pkg/errors"
@@ -72,7 +73,12 @@ func main() {
 
 		log.Info("successfully created deployment ", id)
 
-		fmt.Printf("::set-output name=ID::%v\n", id)
+		cmd := exec.Command("/bin/sh","-c",fmt.Sprintf("echo \"ID=%v\" >> $GITHUB_OUTPUT",id))
+        cmd.Stdout = os.Stdout
+        if err := cmd.Run(); err != nil {
+           fmt.Printf("error executing shell command: %v", err.Error())
+           os.Exit(1)
+           }
 	} else {
 		n, err := strconv.Atoi(os.Getenv("DEPLOYMENT"))
 		if err != nil {
